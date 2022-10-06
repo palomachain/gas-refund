@@ -5,7 +5,7 @@ import numpy as np
 import sys
 current_dir = os.getcwd()
 sys.path.insert(1, os.path.abspath(os.path.join(current_dir, '../../')))
-from etherscan import etherscan_api
+import etherscan_api
 
 def conv_dt_rev(dt_int):
     """
