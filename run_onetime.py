@@ -6,7 +6,7 @@ from eth_account import Account
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 current_dir = os.getcwd()
 sys.path.insert(1, os.path.abspath(os.path.join(current_dir, '../../')))
-from etherscan import etherscan_api
+import etherscan_api
 
 """
 This script requires the following environment variables:
