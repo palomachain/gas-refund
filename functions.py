@@ -1,25 +1,29 @@
+import etherscan_api
 import os
-import time,datetime
+import time
+import datetime
 import pandas as pd
 import numpy as np
 import sys
 current_dir = os.getcwd()
 sys.path.insert(1, os.path.abspath(os.path.join(current_dir, '../../')))
-import etherscan_api
+
 
 def conv_dt_rev(dt_int):
     """
     convert datetime format
     """
-    return datetime.datetime(1970,1,1,0,0,0)+datetime.timedelta(seconds=int(dt_int)/1e0)
+    return datetime.datetime(1970, 1, 1, 0, 0, 0)+datetime.timedelta(seconds=int(dt_int)/1e0)
 
-eth=etherscan_api.EtherscanConnector()
+
+eth = etherscan_api.EtherscanConnector()
 
 contract = '0x49f2Daa49F4a0CCB44F20DeD511a1F853133678b'
 txs = eth.get_normal_transactions(address=contract)
 methodid = '0xeadf4af7'
 
-def get_refundlist(fromtime = '2022-08-25 15:00:00',totime = '2022-08-26 09:00:00' ):
+
+def get_refundlist(fromtime='2022-08-25 15:00:00', totime='2022-08-26 09:00:00'):
     fromtime_ = pd.to_datetime(fromtime)
     totime_ = pd.to_datetime(totime)
 
@@ -32,9 +36,11 @@ def get_refundlist(fromtime = '2022-08-25 15:00:00',totime = '2022-08-26 09:00:0
                 if time_ > fromtime_ and time_ <= totime_:
                     sender_ = tx['from']
                     if sender_ not in refund_list.keys():
-                        refund_list[sender_] = int(tx['gasUsed']) * int(tx['gasPrice'])
+                        refund_list[sender_] = int(
+                            tx['gasUsed']) * int(tx['gasPrice'])
                     else:
-                        refund_list[sender_] += int(tx['gasUsed']) * int(tx['gasPrice'])
+                        refund_list[sender_] += int(tx['gasUsed']) * \
+                            int(tx['gasPrice'])
                     # print(tx['blockNumber'], time_, sender_, refund_list[sender_])
                 elif time_ < fromtime_:
                     break
@@ -43,7 +49,8 @@ def get_refundlist(fromtime = '2022-08-25 15:00:00',totime = '2022-08-26 09:00:0
 
     return refund_list
 
-def get_refundlist_byblock(contract, methodid, fromblock,toblock):
+
+def get_refundlist_byblock(contract, methodid, fromblock, toblock):
 
     refund_list = {}
     txs = eth.get_normal_transactions(address=contract)
@@ -55,9 +62,11 @@ def get_refundlist_byblock(contract, methodid, fromblock,toblock):
                 if blockid_ >= fromblock and blockid_ <= toblock:
                     sender_ = tx['from']
                     if sender_ not in refund_list.keys():
-                        refund_list[sender_] = int(tx['gasUsed']) * int(tx['gasPrice'])
+                        refund_list[sender_] = int(
+                            tx['gasUsed']) * int(tx['gasPrice'])
                     else:
-                        refund_list[sender_] += int(tx['gasUsed']) * int(tx['gasPrice'])
+                        refund_list[sender_] += int(tx['gasUsed']) * \
+                            int(tx['gasPrice'])
                     # print(tx['blockNumber'], time_, sender_, refund_list[sender_])
                 elif blockid_ < fromtblock:
                     break
@@ -66,7 +75,8 @@ def get_refundlist_byblock(contract, methodid, fromblock,toblock):
 
     return refund_list
 
-def get_refundlist_old(fromtime = '2022-08-25 15:00:00',totime = '2022-08-26 09:00:00',eth_lowercap = 0.1,refund_cap = 0.15 ):
+
+def get_refundlist_old(fromtime='2022-08-25 15:00:00', totime='2022-08-26 09:00:00', eth_lowercap=0.1, refund_cap=0.15):
     fromtime_ = pd.to_datetime(fromtime)
     totime_ = pd.to_datetime(totime)
 
@@ -80,7 +90,7 @@ def get_refundlist_old(fromtime = '2022-08-25 15:00:00',totime = '2022-08-26 09:
                     sender_ = tx['from']
                     if not sender_ in sender_list:
                         balance_ = float(eth.get_account_eth(sender_))/1e18
-                        print(tx['blockNumber'],time_, sender_,balance_)
+                        print(tx['blockNumber'], time_, sender_, balance_)
                         sender_list.append(sender_)
 
                         if balance_ < eth_lowercap:
@@ -92,6 +102,7 @@ def get_refundlist_old(fromtime = '2022-08-25 15:00:00',totime = '2022-08-26 09:
         print(e)
 
     return refund_list
+
 
 if __name__ == '__main__':
     print(get_refundlist())
