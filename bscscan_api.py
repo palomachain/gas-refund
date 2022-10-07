@@ -1,10 +1,12 @@
 import os
-import time,datetime
+import time
+import datetime
 import logging
 import pandas as pd
 import numpy as np
 import requests
 from typing import Any, Dict, List, Optional, TypedDict, Union
+
 
 class BscscanConnector:
 
@@ -109,7 +111,7 @@ class BscscanConnector:
             address=address, topic0=topic0, api_key=self.API_KEY
         )
         return self.run_query(event_log_query)
-    
+
     def get_event_log_bytopic(self, topic0, topic1, topic2, fromblock=None, toblock=None) -> List[Dict[str, Any]]:
         event_log_url: List[str] = [
             self.api_endpoint_preamble,
@@ -127,7 +129,7 @@ class BscscanConnector:
         if toblock:
             event_log_url += '&toBlock'+str(toblock)
         event_log_query = event_log_url.format(
-            topic0=topic0,topic1=topic1,topic2=topic2, api_key=self.API_KEY
+            topic0=topic0, topic1=topic1, topic2=topic2, api_key=self.API_KEY
         )
         print(event_log_query)
         return self.run_query(event_log_query)
@@ -145,5 +147,5 @@ class BscscanConnector:
         account_eth_query: str = account_eth_url.format(
             address=address, api_key=self.API_KEY
         )
-        #print(account_eth_query)
+        # print(account_eth_query)
         return self.run_query(query=account_eth_query)
