@@ -9,8 +9,7 @@ private_key = os.environ['PRIVATE_KEY']
 account_from = Account.from_key(private_key)
 
 nonce = w3.eth.get_transaction_count(account_from.address)
-max_priority_fee = w3.eth.max_priority_fee
-gas_price = w3.eth.gas_price * 2 + max_priority_fee
+gas_price = int(w3.eth.gas_price * 1.1)
 transaction = {
     'to': account_from.address,
     'gas': 21000,
