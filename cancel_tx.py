@@ -14,8 +14,7 @@ gas_price = w3.eth.gas_price * 2 + max_priority_fee
 transaction = {
     'to': account_from.address,
     'gas': 21000,
-    'maxFeePerGas': gas_price,
-    'maxPriorityFeePerGas': max_priority_fee,
+    'gasPrice': gas_price,
     'nonce': nonce,
     'chainId': 1
 }
