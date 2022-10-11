@@ -18,7 +18,7 @@ def conv_dt_rev(dt_int):
 
 eth = etherscan_api.EtherscanConnector()
 
-contract = '0x49f2Daa49F4a0CCB44F20DeD511a1F853133678b'
+contract = '0x24B10a62385C2d04F3f04Dd55297ADD7b4502530' # compass evm
 txs = eth.get_normal_transactions(address=contract)
 methodid = '0xeadf4af7'
 
