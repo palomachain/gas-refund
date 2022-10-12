@@ -19,7 +19,7 @@ def conv_dt_rev(dt_int):
 bsc = bscscan_api.BscscanConnector()
 
 # this is the compass contract
-contract = '0xB3c4641D309c21766AC00B3524D246Ee73bf5475'
+contract = '0x460898222468A1d375A8a2c8E92958e9ad006D7B'
 txs = bsc.get_normal_transactions(address=contract)
 methodid = '0xeadf4af7'
 

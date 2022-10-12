@@ -1,5 +1,5 @@
 import bscscan_api
-from functions import get_refundlist, conv_dt_rev
+from functions_bsc import get_refundlist, conv_dt_rev
 import sys
 import os
 import datetime
