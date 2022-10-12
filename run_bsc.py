@@ -47,7 +47,7 @@ totime = datetime.datetime.utcnow()
 
 print(fromtime, totime)
 
-def send(refund_list, gas=21000, account_from=account_from):
+def send_EIP1559(refund_list, gas=21000, account_from=account_from):
 
     value = 0
     address_list = []
@@ -77,7 +77,7 @@ def send(refund_list, gas=21000, account_from=account_from):
     else:
         print('no refund needed')
 
-def send_oldgasstrat(refund_list, gas=21000, account_from=account_from):
+def send(refund_list, gas=21000, account_from=account_from):
 
     w3.eth.set_gas_price_strategy(rpc_gas_price_strategy)
     value = 0
