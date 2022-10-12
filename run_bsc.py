@@ -29,7 +29,7 @@ if 1:
     private_key = os.environ['BSC_PRIVATE_KEY']
     account_from = Account.from_key(private_key)
     assert account_from.address == "0x83334ef0C6f6396413C508A7762741e9FD8B20E9" ## this is the refund wallet address
-contract_address = "0x4f62af8ff4b9b22f53ee56cb576b02efe2866825"  ## this is the refund contract address
+contract_address = "0x4F62AF8fF4b9B22f53eE56cB576B02EFE2866825"  ## this is the refund contract address
 abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [
     {"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
 
@@ -41,10 +41,7 @@ for tx in txs:
     if tx["functionName"][0:6] == "refund":
         fromtime = conv_dt_rev(tx['timeStamp'])
         break
-else:
-    fromtime = datetime.datetime(1900,1,1,0,0,0)
-    print('first time refund')
-    #raise Exception("Could not find timeStamp")
+
 totime = datetime.datetime.utcnow()
 
 print(fromtime, totime)
