@@ -16,7 +16,7 @@ WALLET: refund wallet address
 BSC_PRIVATE_KEY: refund wallet private key
 """
 
-node = "https://bsc-dataseed.binance.org/"  # os.environ['BSC_NODE']
+node = "https://bsc-dataseed.binance.org/"  # node = os.environ['BSC_NODE']
 w3 = Web3(Web3.HTTPProvider(node))
 print('check bsc node connected: ', w3.isConnected())
 
@@ -41,8 +41,10 @@ for tx in txs:
     if tx["functionName"][0:6] == "refund":
         fromtime = conv_dt_rev(tx['timeStamp'])
         break
-    else:
-        raise Exception("Could not find timeStamp")
+else:
+    fromtime = datetime.datetime(1900,1,1,0,0,0)
+    print('first time refund')
+    #raise Exception("Could not find timeStamp")
 totime = datetime.datetime.utcnow()
 
 print(fromtime, totime)
