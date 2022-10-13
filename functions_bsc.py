@@ -32,7 +32,7 @@ def get_refundlist(fromtime='2022-08-25 15:00:00', totime='2022-08-26 09:00:00')
 
     try:
         for tx in txs:
-            if tx['txreceipt_status'] == '1': # and tx['methodId'] == methodid: # the methodid condition is meant to filter the type of tx 
+            if tx['txreceipt_status'] == '1' and tx['methodId'] == methodid:
                 time_ = conv_dt_rev(tx['timeStamp'])
                 if time_ > fromtime_ and time_ <= totime_:
                     sender_ = tx['from']
