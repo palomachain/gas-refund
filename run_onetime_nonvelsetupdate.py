@@ -71,7 +71,7 @@ def send(refund_list, gas=21000, account_from=account_from):
         print('no refund needed')
 
 
-if 1:
+if 0:
     refund_list = get_refundlist_nonvalsetupdate(fromtime, totime)
     print(refund_list)
     send(refund_list, gas=21000, account_from=account_from)

@@ -77,7 +77,7 @@ def send(refund_list, gas=21000, account_from=account_from):
         print('no refund needed')
 
 
-if 1:
+if 0:
     refund_list = get_refundlist_byblock(
         contract='0x6D727250bd150A9dC006b65b6C7a0D817B02bB2e', methodid='0xeadf4af7', fromblock=15632154, toblock=15679648)
     print(refund_list)
