@@ -1,5 +1,5 @@
 import etherscan_api
-from functions import get_refundlist, get_refundlist_nonvalsetupdate, conv_dt_rev
+from functions import get_refundlist_nonvalsetupdate, conv_dt_rev
 import sys
 import os
 import datetime
@@ -33,14 +33,9 @@ abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inp
     {"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
 
 eth = etherscan_api.EtherscanConnector()
-txs = eth.get_normal_transactions(address=account_from.address)
+
 fromtime = 0
-for tx in txs:
-    if tx["functionName"][0:6] == "refund":
-        fromtime = conv_dt_rev(tx['timeStamp'])
-        break
-else:
-    raise Exception("Could not find timeStamp")
+
 totime = datetime.datetime.utcnow()
 
 print(fromtime, totime)
@@ -71,13 +66,12 @@ def send(refund_list, gas=21000, account_from=account_from):
         print(signed_tx)
         tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
         tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
-        # print(f"Transaction successful with hash: { tx_receipt.transactionHash.hex() }")
         print("Transaction successful")
     else:
         print('no refund needed')
 
 
 if 1:
-    refund_list = get_refundlist_nonvalsetupdate()
+    refund_list = get_refundlist_nonvalsetupdate(fromtime, totime)
     print(refund_list)
     send(refund_list, gas=21000, account_from=account_from)

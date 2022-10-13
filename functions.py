@@ -23,7 +23,7 @@ txs = eth.get_normal_transactions(address=contract)
 methodid = '0xeadf4af7'
 
 
-def get_refundlist(fromtime='2022-08-25 15:00:00', totime='2022-08-26 09:00:00'):
+def get_refundlist(fromtime, totime):
     fromtime_ = pd.to_datetime(fromtime)
     totime_ = pd.to_datetime(totime)
 
@@ -49,7 +49,7 @@ def get_refundlist(fromtime='2022-08-25 15:00:00', totime='2022-08-26 09:00:00')
 
     return refund_list
 
-def get_refundlist_nonvalsetupdate(fromtime='2022-08-25 15:00:00', totime='2022-10-26 09:00:00'):
+def get_refundlist_nonvalsetupdate(fromtime, totime):
     fromtime_ = pd.to_datetime(fromtime)
     totime_ = pd.to_datetime(totime)
 
@@ -96,7 +96,7 @@ def get_refundlist_byblock(contract, methodid, fromblock, toblock):
                         refund_list[sender_] += int(tx['gasUsed']) * \
                             int(tx['gasPrice'])
                     # print(tx['blockNumber'], time_, sender_, refund_list[sender_])
-                elif blockid_ < fromtblock:
+                elif blockid_ < fromblock:
                     break
     except Exception as e:
         print(e)
