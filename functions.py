@@ -49,6 +49,34 @@ def get_refundlist(fromtime='2022-08-25 15:00:00', totime='2022-08-26 09:00:00')
 
     return refund_list
 
+def get_refundlist_nonvalsetupdate(fromtime='2022-08-25 15:00:00', totime='2022-10-26 09:00:00'):
+    fromtime_ = pd.to_datetime(fromtime)
+    totime_ = pd.to_datetime(totime)
+
+    refund_list = {}
+    total_refund = 0
+
+    try:
+        for tx in txs:
+            if tx['txreceipt_status'] == '1' and tx['methodId'] != methodid:
+                time_ = conv_dt_rev(tx['timeStamp'])
+                if time_ > fromtime_ and time_ <= totime_:
+                    sender_ = tx['from']
+                    if sender_ not in refund_list.keys():
+                        refund_list[sender_] = int(tx['gasUsed']) * int(tx['gasPrice'])
+                    else:
+                        refund_list[sender_] += int(tx['gasUsed']) * \
+                            int(tx['gasPrice'])
+                    total_refund += int(tx['gasUsed']) * int(tx['gasPrice'])
+                    # print(tx['blockNumber'], time_, sender_, refund_list[sender_])
+                elif time_ < fromtime_:
+                    break
+    except Exception as e:
+        print(e)
+
+    print('total refund: ',total_refund)
+    return refund_list
+
 
 def get_refundlist_byblock(contract, methodid, fromblock, toblock):
 
@@ -106,3 +134,4 @@ def get_refundlist_old(fromtime='2022-08-25 15:00:00', totime='2022-08-26 09:00:
 
 if __name__ == '__main__':
     print(get_refundlist())
+    print(get_refundlist_nonvalsetupdate())
