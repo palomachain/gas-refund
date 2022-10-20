@@ -40,15 +40,15 @@ txs_contract = eth.get_normal_transactions(address=contract_address)
 fromtime = 0
 for tx in txs_account:
     if tx["functionName"][0:6] == "refund":
-        fromtime = conv_dt_rev(tx['timeStamp'])
+        fromtime = int(tx['timeStamp'])
         break
 
 for tx in txs_contract:
-    if fromtime > conv_dt_rev(tx['timeStamp']):
+    if fromtime > int(tx['timeStamp']):
         break
     if tx["functionName"][0:6] == "refund":
-        if fromtime < conv_dt_rev(tx['timeStamp']):
-            fromtime = conv_dt_rev(tx['timeStamp'])
+        if fromtime < int(tx['timeStamp']):
+            fromtime = int(tx['timeStamp'])
         break
 
 totime = datetime.datetime.utcnow()
