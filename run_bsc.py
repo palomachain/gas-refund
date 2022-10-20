@@ -28,7 +28,7 @@ print('check bsc node connected: ', w3.isConnected())
 
 private_key = os.environ['BSC_PRIVATE_KEY']
 account_from = Account.from_key(private_key)
-assert account_from.address == "0x83334ef0C6f6396413C508A7762741e9FD8B20E9" ## this is the refund wallet address
+assert account_from.address == os.environ['REFUND_WALLET'] ## this is the refund wallet address
 contract_address = "0x4F62AF8fF4b9B22f53eE56cB576B02EFE2866825"  ## this is the refund contract address
 abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [
     {"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]

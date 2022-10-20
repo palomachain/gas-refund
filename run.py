@@ -27,7 +27,7 @@ print('check EVM node connected: ', w3.isConnected())
 
 private_key = os.environ['PRIVATE_KEY']
 account_from = Account.from_key(private_key)
-assert account_from.address == "0xF48F4e86dE6a30D75dbe3A6C67E17Cf3cbDE5768"  # this is the refund wallet address
+assert account_from.address == os.environ['REFUND_WALLET']  # this is the refund wallet address
 contract_address = "0x2e89c7e795a162Acda3eAac8f4abbb321517F20F"  # this is the refund contract
 abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [
     {"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
