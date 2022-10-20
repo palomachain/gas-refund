@@ -25,21 +25,30 @@ print('check bsc node connected: ', w3.isConnected())
 # eth_lowercap = float(argv[3]) #0.1
 # refund_cap =  float(argv[4]) #0.15
 
-if 1:
-    private_key = os.environ['BSC_PRIVATE_KEY']
-    account_from = Account.from_key(private_key)
-    assert account_from.address == "0x83334ef0C6f6396413C508A7762741e9FD8B20E9" ## this is the refund wallet address
+
+private_key = os.environ['BSC_PRIVATE_KEY']
+account_from = Account.from_key(private_key)
+assert account_from.address == "0x83334ef0C6f6396413C508A7762741e9FD8B20E9" ## this is the refund wallet address
 contract_address = "0x4F62AF8fF4b9B22f53eE56cB576B02EFE2866825"  ## this is the refund contract address
 abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [
     {"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
 
 bsc = bscscan_api.BscscanConnector()
-txs = bsc.get_normal_transactions(address=account_from.address)
-#txs = bsc.get_normal_transactions('0xF48F4e86dE6a30D75dbe3A6C67E17Cf3cbDE5768')
+txs_account = bsc.get_normal_transactions(address=account_from.address)
+txs_contract = bsc.get_normal_transactions(address=contract_address)
 fromtime = 0
-for tx in txs:
+
+for tx in txs_account:
     if tx["functionName"][0:6] == "refund":
         fromtime = conv_dt_rev(tx['timeStamp'])
+        break
+
+for tx in txs_contract:
+    if fromtime > conv_dt_rev(tx['timeStamp']):
+        break
+    if tx["functionName"][0:6] == "refund":
+        if fromtime < conv_dt_rev(tx['timeStamp']):
+            fromtime = conv_dt_rev(tx['timeStamp'])
         break
 
 totime = datetime.datetime.utcnow()
