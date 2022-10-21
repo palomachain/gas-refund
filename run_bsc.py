@@ -36,19 +36,20 @@ abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inp
 bsc = bscscan_api.BscscanConnector()
 txs_account = bsc.get_normal_transactions(address=account_from.address)
 txs_contract = bsc.get_normal_transactions(address=contract_address)
-fromtime = 0
+
+fromtime = conv_dt_rev(0)
 
 for tx in txs_account:
     if tx["functionName"][0:6] == "refund":
-        fromtime = int(tx['timeStamp'])
+        fromtime = conv_dt_rev(tx['timeStamp'])
         break
 
 for tx in txs_contract:
-    if fromtime > int(tx['timeStamp']):
+    if fromtime > conv_dt_rev(tx['timeStamp']):
         break
     if tx["functionName"][0:6] == "refund":
-        if fromtime < int(tx['timeStamp']):
-            fromtime = int(tx['timeStamp'])
+        if fromtime < conv_dt_rev(tx['timeStamp']):
+            fromtime = conv_dt_rev(tx['timeStamp'])
         break
 
 totime = datetime.datetime.utcnow()
