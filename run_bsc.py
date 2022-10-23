@@ -3,11 +3,22 @@ from functions_bsc import get_refundlist, conv_dt_rev
 import sys
 import os
 import datetime
+import sentry_sdk
+
 from web3 import Web3
 from eth_account import Account
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
 current_dir = os.getcwd()
 sys.path.insert(1, os.path.abspath(os.path.join(current_dir, '../../')))
+
+sentry_sdk.init(
+    dsn=os.environ['SENTRY_DSN'],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+)
 
 """
 This script requires the following environment variables:
