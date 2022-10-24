@@ -8,6 +8,8 @@ import sentry_sdk
 from web3 import Web3
 from eth_account import Account
 from web3.gas_strategies.rpc import rpc_gas_price_strategy
+from mixpanel import Mixpanel
+mp = Mixpanel(os.environ['MIXPANEL_TOKEN'])
 current_dir = os.getcwd()
 sys.path.insert(1, os.path.abspath(os.path.join(current_dir, '../../')))
 
@@ -76,6 +78,10 @@ def send_EIP1559(refund_list, gas=21000, account_from=account_from):
         value += refund_list[receiver]
         address_list.append(w3.toChecksumAddress(receiver))
         amount_list.append(refund_list[receiver])
+        mp.track(receiver, 'GAS_REFUND', {
+            'TYPE': 'BNB',
+            'VALUE': refund_list[receiver],
+        })
     if value > 0:  # this should be added. if value equals zero, we don't need to run tx.
         refund_sc = w3.eth.contract(
             address=contract_address,
