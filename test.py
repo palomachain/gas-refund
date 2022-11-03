@@ -1,5 +1,5 @@
 from web3 import Web3
-import os
+import os, json
 
 infura_key = os.environ['WEB3_INFURA_PROJECT_ID']
 w3 = Web3(Web3.HTTPProvider("https://mainnet.infura.io/v3/" + infura_key))
@@ -28,6 +28,19 @@ def parse_logs(logs):
         if from_block < log['blockNumber']:
             from_block = log['blockNumber']
     return data
+
+def get_latest_block(js):
+    """
+    js is the logs json object
+    """
+    txs = json.loads(js)
+    from_block = 0
+    for tx in txs:
+        block_ = int(float.fromhex(tx['blockNumber']))
+        if block_ > from_block:
+            from_block = block_
+
+    return from_block
 
 if __name__ == '__main__':
     logs = get_logs(from_block,contract,[topic0])
