@@ -2,7 +2,7 @@ import bscscan_api
 from functions_bsc import get_refundlist, conv_dt_rev
 import sys
 import os
-import datetime
+import datetime,time
 import sentry_sdk
 
 from web3 import Web3
@@ -31,6 +31,7 @@ BSC_PRIVATE_KEY: refund wallet private key
 
 node = "https://bsc-dataseed.binance.org/"  # node = os.environ['BSC_NODE']
 w3 = Web3(Web3.HTTPProvider(node))
+time.sleep(3)
 print('check bsc node connected: ', w3.isConnected())
 
 # fromtime = argv[1] # '2022-08-25 15:00:00'

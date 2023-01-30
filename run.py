@@ -2,7 +2,7 @@ import etherscan_api
 from functions import get_refundlist, conv_dt_rev
 import sys
 import os
-import datetime
+import datetime,time
 import sentry_sdk
 from web3 import Web3
 from eth_account import Account
@@ -31,6 +31,7 @@ PRIVATE_KEY: refund wallet private key
 
 node = os.environ['NODE']
 w3 = Web3(Web3.HTTPProvider(node))
+time.sleep(3)
 print('check EVM node connected: ', w3.isConnected())
 
 # fromtime = argv[1] # '2022-08-25 15:00:00'
