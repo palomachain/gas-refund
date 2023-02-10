@@ -58,7 +58,6 @@ def refund_eip1559_tx(w3: Web3, refund_list: dict, refund_contract_address: str,
              "maxPriorityFeePerGas": max_priority_fee})
         signed_tx = w3.eth.account.sign_transaction(
             tx_create, private_key=account_from.key)
-        print(signed_tx)
         tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
         tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
         print(
