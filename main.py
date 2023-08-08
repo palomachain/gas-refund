@@ -104,6 +104,25 @@ def eth_refund():
     refund_eip1559_tx(w3, refund_list, refund_contract_address,
               refund_contract_abi, 'ETH', refund_wallet)
 
+def optimism_refund():
+    node = os.environ['ETH_NODE']
+    w3 = Web3(Web3.HTTPProvider(node))
+    print('check OPTIMISM node connected: ', w3.isConnected())
+    private_key = os.environ['ETH_PRIVATE_KEY']
+    refund_wallet = Account.from_key(private_key)
+    assert refund_wallet.address == os.environ['ETH_REFUND_WALLET']
+    refund_contract_address = os.environ['ETH_REFUND_CONTRACT']
+    refund_contract_abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [
+        {"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
+    blockscanner = BlockscanConnector(
+        os.environ['ETHERSCAN_API_PREAMBLE'], os.environ['ETHERSCAN_API_KEY'])
+    from_block = get_from_block(
+        blockscanner, refund_contract_address, refund_wallet.address)
+    compass_evm = os.environ['ETH_COMPASS_EVM']
+    refund_list = get_refund_list(blockscanner, compass_evm, from_block)
+    refund_eip1559_tx(w3, refund_list, refund_contract_address,
+              refund_contract_abi, 'OPTIMISM', refund_wallet)
+
 
 def polygon_refund():
     node = os.environ['POLYGON_NODE']
@@ -134,6 +153,9 @@ def main():
     sys.path.insert(1, os.path.abspath(os.path.join(current_dir, '../../')))
     bsc_refund()
     polygon_refund()
+    eth_refund()
+    optimism_refund()
+
 
 if __name__ == "__main__":
     main()
