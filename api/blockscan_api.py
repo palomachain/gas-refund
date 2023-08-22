@@ -1,7 +1,7 @@
 import time
 import logging
 import requests
-from typing import Any, Dict, List, Optional, TypedDict, Union
+from typing import Any, Dict, Optional
 
 
 class BlockscanConnector:
@@ -35,7 +35,7 @@ class BlockscanConnector:
             # Raise so retry can retry
             raise
 
-    def get_normal_transactions(self, address, start_block:Optional[int]=None, end_block:Optional[int]=None):
+    def get_normal_transactions(self, address, start_block: Optional[int] = None, end_block: Optional[int] = None):
         tx_list_url: str = "".join(
             [
                 self.api_endpoint_preamble,
