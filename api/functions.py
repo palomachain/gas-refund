@@ -7,7 +7,7 @@ def get_from_block(blockscanner: BlockscanConnector, refund_contract_address: st
         address=refund_wallet_address)
     from_block = 0
     for tx in txs_account:
-        if tx["functionName"][0:6] == "refund":
+        if tx["methodId"] == "0xc091c435":
             from_block = int(tx['blockNumber'])
             break
     txs_contract = blockscanner.get_normal_transactions(
@@ -15,7 +15,7 @@ def get_from_block(blockscanner: BlockscanConnector, refund_contract_address: st
     for tx in txs_contract:
         if from_block > int(tx['blockNumber']):
             break
-        if tx["functionName"][0:6] == "refund":
+        if tx["methodId"] == "0xc091c435":
             if from_block < int(tx['blockNumber']):
                 from_block = int(tx['blockNumber'])
             break
