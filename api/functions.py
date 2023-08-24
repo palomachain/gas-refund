@@ -15,7 +15,7 @@ def get_from_block(blockscanner: BlockscanConnector, refund_contract_address: st
     for tx in txs_contract:
         if from_block > int(tx['blockNumber']):
             break
-        if tx["methodId"][0:6] == "0xc091c435":
+        if tx["methodId"] == "0xc091c435":
             if from_block < int(tx['blockNumber']):
                 from_block = int(tx['blockNumber'])
             break
