@@ -106,6 +106,22 @@ def polygon_refund():
     refund_eip1559_tx(w3, refund_list, refund_contract_address, refund_contract_abi, 'POLYGON', refund_wallet)
 
 
+def gnosis_refund():
+    node = os.environ['GNOSIS_NODE']
+    w3 = Web3(Web3.HTTPProvider(node))
+    print('check GNOSIS node connected: ', w3.isConnected())
+    private_key = os.environ['GNOSIS_PRIVATE_KEY']
+    refund_wallet = Account.from_key(private_key)
+    assert refund_wallet.address == os.environ['GNOSIS_REFUND_WALLET']
+    refund_contract_address = os.environ['GNOSIS_REFUND_CONTRACT']
+    refund_contract_abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [{"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
+    blockscanner = BlockscanConnector(os.environ['GNOSISSCAN_API_PREAMBLE'], os.environ['GNOSISSCAN_API_KEY'])
+    from_block = get_from_block(blockscanner, refund_contract_address, refund_wallet.address)
+    compass_evm = os.environ['GNOSIS_COMPASS_EVM']
+    refund_list = get_refund_list(blockscanner, compass_evm, from_block)
+    refund_eip1559_tx(w3, refund_list, refund_contract_address, refund_contract_abi, 'GNOSIS', refund_wallet)
+
+
 def optimism_refund():
     node = os.environ['OPTIMISM_NODE']
     w3 = Web3(Web3.HTTPProvider(node))
@@ -133,6 +149,7 @@ def main():
     polygon_refund()
     eth_refund()
     optimism_refund()
+    gnosis_refund()
 
 
 if __name__ == "__main__":
