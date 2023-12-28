@@ -138,6 +138,38 @@ def optimism_refund():
     refund_eip1559_tx(w3, refund_list, refund_contract_address, refund_contract_abi, 'OPTIMISM', refund_wallet)
 
 
+def arbitrum_refund():
+    node = os.environ['ARBITRUM_NODE']
+    w3 = Web3(Web3.HTTPProvider(node))
+    print('check ARBITRUM node connected: ', w3.isConnected())
+    private_key = os.environ['ARBITRUM_PRIVATE_KEY']
+    refund_wallet = Account.from_key(private_key)
+    assert refund_wallet.address == os.environ['ARBITRUM_REFUND_WALLET']
+    refund_contract_address = os.environ['ARBITRUM_REFUND_CONTRACT']
+    refund_contract_abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [{"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
+    blockscanner = BlockscanConnector(os.environ['ARBITRUMSCAN_API_PREAMBLE'], os.environ['ARBITRUMSCAN_API_KEY'])
+    from_block = get_from_block(blockscanner, refund_contract_address, refund_wallet.address)
+    compass_evm = os.environ['ARBITRUM_COMPASS_EVM']
+    refund_list = get_refund_list(w3, blockscanner, compass_evm, from_block)
+    refund_eip1559_tx(w3, refund_list, refund_contract_address, refund_contract_abi, 'ARBITRUM', refund_wallet)
+
+
+def base_refund():
+    node = os.environ['BASE_NODE']
+    w3 = Web3(Web3.HTTPProvider(node))
+    print('check BASE node connected: ', w3.isConnected())
+    private_key = os.environ['BASE_PRIVATE_KEY']
+    refund_wallet = Account.from_key(private_key)
+    assert refund_wallet.address == os.environ['BASE_REFUND_WALLET']
+    refund_contract_address = os.environ['BASE_REFUND_CONTRACT']
+    refund_contract_abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [{"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
+    blockscanner = BlockscanConnector(os.environ['BASE_API_PREAMBLE'], os.environ['BASESCAN_API_KEY'])
+    from_block = get_from_block(blockscanner, refund_contract_address, refund_wallet.address)
+    compass_evm = os.environ['BASE_COMPASS_EVM']
+    refund_list = get_refund_list_optimism(w3, blockscanner, compass_evm, from_block)
+    refund_eip1559_tx(w3, refund_list, refund_contract_address, refund_contract_abi, 'BASE', refund_wallet)
+
+
 def main():
     load_dotenv()
     global mp
@@ -150,6 +182,8 @@ def main():
     eth_refund()
     optimism_refund()
     gnosis_refund()
+    arbitrum_refund()
+    base_refund()
 
 
 if __name__ == "__main__":
