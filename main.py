@@ -150,7 +150,7 @@ def arbitrum_refund():
     blockscanner = BlockscanConnector(os.environ['ARBITRUMSCAN_API_PREAMBLE'], os.environ['ARBITRUMSCAN_API_KEY'])
     from_block = get_from_block(blockscanner, refund_contract_address, refund_wallet.address)
     compass_evm = os.environ['ARBITRUM_COMPASS_EVM']
-    refund_list = get_refund_list(w3, blockscanner, compass_evm, from_block)
+    refund_list = get_refund_list(blockscanner, compass_evm, from_block)
     refund_eip1559_tx(w3, refund_list, refund_contract_address, refund_contract_abi, 'ARBITRUM', refund_wallet)
 
 
