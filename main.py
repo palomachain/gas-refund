@@ -163,7 +163,7 @@ def base_refund():
     assert refund_wallet.address == os.environ['BASE_REFUND_WALLET']
     refund_contract_address = os.environ['BASE_REFUND_CONTRACT']
     refund_contract_abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [{"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
-    blockscanner = BlockscanConnector(os.environ['BASE_API_PREAMBLE'], os.environ['BASESCAN_API_KEY'])
+    blockscanner = BlockscanConnector(os.environ['BASESCAN_API_PREAMBLE'], os.environ['BASESCAN_API_KEY'])
     from_block = get_from_block(blockscanner, refund_contract_address, refund_wallet.address)
     compass_evm = os.environ['BASE_COMPASS_EVM']
     refund_list = get_refund_list_optimism(w3, blockscanner, compass_evm, from_block)
