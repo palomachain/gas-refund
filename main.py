@@ -170,6 +170,22 @@ def base_refund():
     refund_eip1559_tx(w3, refund_list, refund_contract_address, refund_contract_abi, 'BASE', refund_wallet)
 
 
+def blast_refund():
+    node = os.environ['BLAST_NODE']
+    w3 = Web3(Web3.HTTPProvider(node))
+    print('check BLAST node connected: ', w3.isConnected())
+    private_key = os.environ['BLAST_PRIVATE_KEY']
+    refund_wallet = Account.from_key(private_key)
+    assert refund_wallet.address == os.environ['BLAST_REFUND_WALLET']
+    refund_contract_address = os.environ['BLAST_REFUND_CONTRACT']
+    refund_contract_abi = [{"type": "function", "name": "refund", "stateMutability": "payable", "inputs": [{"name": "receivers", "type": "address[]"}, {"name": "amounts", "type": "uint256[]"}], "outputs": []}]
+    blockscanner = BlockscanConnector(os.environ['BLASTSCAN_API_PREAMBLE'], os.environ['BLASTSCAN_API_KEY'])
+    from_block = get_from_block(blockscanner, refund_contract_address, refund_wallet.address)
+    compass_evm = os.environ['BLAST_COMPASS_EVM']
+    refund_list = get_refund_list_optimism(w3, blockscanner, compass_evm, from_block)
+    refund_eip1559_tx(w3, refund_list, refund_contract_address, refund_contract_abi, 'BLAST', refund_wallet)
+
+
 def main():
     load_dotenv()
     global mp
@@ -184,6 +200,7 @@ def main():
     gnosis_refund()
     arbitrum_refund()
     base_refund()
+    blast_refund()
 
 
 if __name__ == "__main__":
